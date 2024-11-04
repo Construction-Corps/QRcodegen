@@ -12,7 +12,8 @@
 
             if (url && name) {
                 const qrText = `URL: ${url}`;
-                const qrcode = new QRCode(document.getElementById("qrcode"), {
+                const qrcodeContainer = document.createElement("div");
+                new QRCode(qrcodeContainer, {
                     text: qrText,
                     width: 256,
                     height: 256,
@@ -24,23 +25,35 @@
                 setTimeout(() => { // Ensure QR code is rendered
                     const canvas = document.createElement("canvas");
                     const context = canvas.getContext("2d");
-                    const qrCanvas = document.querySelector("#qrcode canvas");
+                    const qrCanvas = qrcodeContainer.querySelector("canvas");
 
                     canvas.width = 256;
-                    canvas.height = 300; // Extra space for the name
+                    canvas.height = 320; // Extra space for the logo and name
 
                     // Draw the QR code onto the canvas
                     context.drawImage(qrCanvas, 0, 0);
 
-                    // Draw the name below the QR code
-                    context.font = "20px Arial";
-                    context.fillStyle = "#000000";
-                    context.textAlign = "center";
-                    context.fillText(name, canvas.width / 2, 280);
+                    // Add the logo to the center of the QR code
+                    const logo = new Image();
+                    logo.src = "cclogo.png";
+                    logo.onload = () => {
+                        const logoSize = 64; // Adjust logo size if needed
+                        const logoPositionX = (canvas.width - logoSize) / 2;
+                        const logoPositionY = (qrCanvas.height - logoSize) / 2;
+                        context.drawImage(logo, logoPositionX, logoPositionY, logoSize, logoSize);
 
-                    // Convert canvas to image and display
-                    const img = canvas.toDataURL("image/png");
-                    document.getElementById("qrcode").innerHTML = `<img src="${img}" alt="QR Code"><br><a href="${img}" download="qrcode.png">Download QR Code</a>`;
+                        // Draw the name below the QR code
+                        context.font = "20px Arial";
+                        context.fillStyle = "#ffffff";
+                        context.textAlign = "center";
+                        context.fillRect(0, 260, canvas.width, 40); // Black background
+                        context.fillStyle = "#000000";
+                        context.fillText(name, canvas.width / 2, 290);
+
+                        // Convert canvas to image and display
+                        const img = canvas.toDataURL("image/png");
+                        document.getElementById("qrcode").innerHTML = `<img src="${img}" alt="QR Code"><br><a href="${img}" download="qrcode.png">Download QR Code</a>`;
+                    };
                 }, 500);
             } else {
                 alert("Missing URL or name in query parameters.");
@@ -50,10 +63,6 @@
     <style>
         #qrcode img {
             margin-bottom: 10px;
-        }
-        #name {
-            font-size: 20px;
-            font-weight: bold;
         }
     </style>
 </head>
