@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>QR Code Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@700&display=swap" rel="stylesheet"> <!-- Link to Open Sans Bold -->
     <script src="qrcode.min.js"></script> <!-- Make sure this file is available in your project -->
     <script>
         function generateQRCode() {
@@ -54,20 +55,27 @@
                         // Draw the name below the QR code with a rounded black background
                         context.fillStyle = "#000000";
                         context.beginPath();
-                        context.moveTo(32, 260);
-                        context.lineTo(268, 260);
-                        context.quadraticCurveTo(278, 260, 278, 270);
-                        context.lineTo(278, 300);
-                        context.quadraticCurveTo(278, 310, 268, 310);
-                        context.lineTo(32, 310);
-                        context.quadraticCurveTo(22, 310, 22, 300);
-                        context.lineTo(22, 270);
-                        context.quadraticCurveTo(22, 260, 32, 260);
+                        context.moveTo(22, 260);
+                        context.lineTo(278, 260);
+                        context.quadraticCurveTo(288, 260, 288, 270);
+                        context.lineTo(288, 310);
+                        context.quadraticCurveTo(288, 320, 278, 320);
+                        context.lineTo(22, 320);
+                        context.quadraticCurveTo(12, 320, 12, 310);
+                        context.lineTo(12, 270);
+                        context.quadraticCurveTo(12, 260, 22, 260);
                         context.closePath();
                         context.fill();
 
+                        // Dynamically adjust font size to fit text
+                        let fontSize = 20;
+                        context.font = `bold ${fontSize}px 'Open Sans'`;
+                        while (context.measureText(name).width > 256 && fontSize > 10) {
+                            fontSize--;
+                            context.font = `bold ${fontSize}px 'Open Sans'`;
+                        }
+
                         context.fillStyle = "#ffffff";
-                        context.font = "bold 20px 'Open Sans'";
                         context.textAlign = "center";
                         context.fillText(name, canvas.width / 2, 295);
 
