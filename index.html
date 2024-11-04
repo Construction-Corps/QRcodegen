@@ -1,1 +1,64 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <title>QR Code Generator</title> <script src="qrcode.min.js"></script> <!-- Make sure this file is available in your project --> <script> function generateQRCode() { const params = new URLSearchParams(window.location.search); const url = params.get('url'); const name = params.get('name'); if (url && name) { const qrText = `URL: ${url}\nName: ${name}`; new QRCode(document.getElementById("qrcode"), qrText); } else { alert("Missing URL or name in query parameters."); } } </script> </head> <body onload="generateQRCode()"> <h1>QR Code Generator</h1> <div id="qrcode"></div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>QR Code Generator</title>
+    <script src="qrcode.min.js"></script> <!-- Make sure this file is available in your project -->
+    <script>
+        function generateQRCode() {
+            const params = new URLSearchParams(window.location.search);
+            const url = params.get('url');
+            const name = params.get('name');
+
+            if (url && name) {
+                const qrText = `URL: ${url}`;
+                const qrcode = new QRCode(document.getElementById("qrcode"), {
+                    text: qrText,
+                    width: 256,
+                    height: 256,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+
+                setTimeout(() => { // Ensure QR code is rendered
+                    const canvas = document.createElement("canvas");
+                    const context = canvas.getContext("2d");
+                    const qrCanvas = document.querySelector("#qrcode canvas");
+
+                    canvas.width = 256;
+                    canvas.height = 300; // Extra space for the name
+
+                    // Draw the QR code onto the canvas
+                    context.drawImage(qrCanvas, 0, 0);
+
+                    // Draw the name below the QR code
+                    context.font = "20px Arial";
+                    context.fillStyle = "#000000";
+                    context.textAlign = "center";
+                    context.fillText(name, canvas.width / 2, 280);
+
+                    // Convert canvas to image and display
+                    const img = canvas.toDataURL("image/png");
+                    document.getElementById("qrcode").innerHTML = `<img src="${img}" alt="QR Code"><br><a href="${img}" download="qrcode.png">Download QR Code</a>`;
+                }, 500);
+            } else {
+                alert("Missing URL or name in query parameters.");
+            }
+        }
+    </script>
+    <style>
+        #qrcode img {
+            margin-bottom: 10px;
+        }
+        #name {
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body onload="generateQRCode()">
+    <h1>QR Code Generator</h1>
+    <div id="qrcode"></div>
+</body>
+</html>
