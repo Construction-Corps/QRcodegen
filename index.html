@@ -28,9 +28,9 @@
                     const qrCanvas = qrcodeContainer.querySelector("canvas");
 
                     canvas.width = 300;
-                    canvas.height = 340; // Extra space for the logo and name
+                    canvas.height = 360; // Extra space for the logo and name
 
-                    // Draw a white rectangle for the frame
+                    // Draw a white rectangle for the frame with rounded corners
                     context.fillStyle = "#ffffff";
                     context.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -42,15 +42,30 @@
                     logo.src = "cclogo.png";
                     logo.onload = () => {
                         const logoSize = 64; // Adjust logo size if needed
+                        const logoPadding = 12; // Padding around the logo
+                        const logoBoxSize = logoSize + 2 * logoPadding;
                         const logoPositionX = (canvas.width - logoSize) / 2;
                         const logoPositionY = (qrCanvas.height - logoSize) / 2;
+
                         context.fillStyle = "#ffffff";
-                        context.fillRect(logoPositionX, logoPositionY, logoSize, logoSize);
+                        context.fillRect(logoPositionX - logoPadding, logoPositionY - logoPadding, logoBoxSize, logoBoxSize);
                         context.drawImage(logo, logoPositionX, logoPositionY, logoSize, logoSize);
 
                         // Draw the name below the QR code with a rounded black background
                         context.fillStyle = "#000000";
-                        context.fillRect(22, 260, 256, 50);
+                        context.beginPath();
+                        context.moveTo(32, 260);
+                        context.lineTo(268, 260);
+                        context.quadraticCurveTo(278, 260, 278, 270);
+                        context.lineTo(278, 300);
+                        context.quadraticCurveTo(278, 310, 268, 310);
+                        context.lineTo(32, 310);
+                        context.quadraticCurveTo(22, 310, 22, 300);
+                        context.lineTo(22, 270);
+                        context.quadraticCurveTo(22, 260, 32, 260);
+                        context.closePath();
+                        context.fill();
+
                         context.fillStyle = "#ffffff";
                         context.font = "20px Arial";
                         context.textAlign = "center";
@@ -69,10 +84,6 @@
     <style>
         #qrcode img {
             margin-bottom: 10px;
-        }
-        #name {
-            font-size: 20px;
-            font-weight: bold;
         }
     </style>
 </head>
