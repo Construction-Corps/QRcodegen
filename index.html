@@ -27,11 +27,15 @@
                     const context = canvas.getContext("2d");
                     const qrCanvas = qrcodeContainer.querySelector("canvas");
 
-                    canvas.width = 256;
-                    canvas.height = 320; // Extra space for the logo and name
+                    canvas.width = 300;
+                    canvas.height = 340; // Extra space for the logo and name
+
+                    // Draw a white rectangle for the frame
+                    context.fillStyle = "#ffffff";
+                    context.fillRect(0, 0, canvas.width, canvas.height);
 
                     // Draw the QR code onto the canvas
-                    context.drawImage(qrCanvas, 0, 0);
+                    context.drawImage(qrCanvas, 22, 0);
 
                     // Add the logo to the center of the QR code
                     const logo = new Image();
@@ -40,15 +44,17 @@
                         const logoSize = 64; // Adjust logo size if needed
                         const logoPositionX = (canvas.width - logoSize) / 2;
                         const logoPositionY = (qrCanvas.height - logoSize) / 2;
+                        context.fillStyle = "#ffffff";
+                        context.fillRect(logoPositionX, logoPositionY, logoSize, logoSize);
                         context.drawImage(logo, logoPositionX, logoPositionY, logoSize, logoSize);
 
-                        // Draw the name below the QR code
-                        context.font = "20px Arial";
-                        context.fillStyle = "#ffffff";
-                        context.textAlign = "center";
-                        context.fillRect(0, 260, canvas.width, 40); // Black background
+                        // Draw the name below the QR code with a rounded black background
                         context.fillStyle = "#000000";
-                        context.fillText(name, canvas.width / 2, 290);
+                        context.fillRect(22, 260, 256, 50);
+                        context.fillStyle = "#ffffff";
+                        context.font = "20px Arial";
+                        context.textAlign = "center";
+                        context.fillText(name, canvas.width / 2, 295);
 
                         // Convert canvas to image and display
                         const img = canvas.toDataURL("image/png");
@@ -63,6 +69,10 @@
     <style>
         #qrcode img {
             margin-bottom: 10px;
+        }
+        #name {
+            font-size: 20px;
+            font-weight: bold;
         }
     </style>
 </head>
