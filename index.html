@@ -81,7 +81,9 @@
 
                         // Convert canvas to image and display
                         const img = canvas.toDataURL("image/png");
-                        document.getElementById("qrcode").innerHTML = `<img src="${img}" alt="QR Code"><br><a href="${img}" download="qrcode.png">Download QR Code</a>`;
+                        const fileName = name ? `${name}.png` : `${url}.png`;
+                        document.getElementById("qrcode").innerHTML = `<img src="${img}" alt="QR Code"><br><a href="${img}" download="${fileName}">Download QR Code</a>`;
+
                     };
                 }, 500);
             } else {
